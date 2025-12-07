@@ -6,6 +6,8 @@
 `ESP32`(Controller) : 가변저항값(좌우, 전후진값) 송신 <br>  $\rightarrow$ `Bluetooth`(50ms)  <br> $\rightarrow$ `Raspberry Pi 4`(RC Car) : 데이터 수신, 데이터 매핑,모터제어 
 
 ![이미지](./TEST.gif)
+> test영상 23초 로딩 오래걸릴 수 있음
+
 
 
 ## 설치 패키지목록
