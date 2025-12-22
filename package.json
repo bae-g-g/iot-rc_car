@@ -21,7 +21,10 @@
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "electron-updater": "^6.3.9",
+    "lucide-react": "^0.562.0",
+    "mqtt": "^5.14.1",
     "react-router-dom": "^7.10.1",
+    "recharts": "^3.6.0",
     "zustand": "^5.0.9"
   },
   "devDependencies": {

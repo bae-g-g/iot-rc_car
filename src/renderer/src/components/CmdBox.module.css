@@ -1,0 +1,15 @@
+.cmdBoxStyle {
+  width: 100%;
+  height: 100%;
+  flex: 300px;
+}
+
+.cmdBoxBtn {
+  width: 100%;
+  padding: 10px;
+}
+
+.cmdBoxMl {
+  width: 100%;
+  padding: 10px;
+}

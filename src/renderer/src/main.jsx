@@ -7,6 +7,8 @@ import Joystick from './pages/Joystick'
 import Dashboard from './pages/Dashboard'
 import AppLayout from './components/AppLayout'
 
+import {client} from './mqtt/subscriber'
+
 // 되면 파일 따로 만들기
 const router = createBrowserRouter([
   {

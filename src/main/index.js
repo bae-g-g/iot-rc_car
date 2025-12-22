@@ -14,7 +14,11 @@ function createWindow() {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+      sandbox: false,
+      // 보안 정책을 비활성화하여 모든 cross-origin 요청 허용 (개발 시에만 권장)
+      webSecurity: false, 
+      nodeIntegration: true,
+      contextIsolation: false
     }
   })
 

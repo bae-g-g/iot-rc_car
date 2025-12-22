@@ -32,3 +32,7 @@ $ npm run build:mac
 # For Linux
 $ npm run build:linux
 ```
+
+### MQTT 실행
+
+토픽 시작 명령어 : mosquitto_sub -h localhost -t /토픽명

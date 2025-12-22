@@ -16,7 +16,7 @@ function CameraController() {
           style={{ display: imageDisplay }}
         />
       ) : (
-        <div className={{ color: '#fff' }}>No Feed</div>
+        <div className={{ color: '#fff' }}>No Carmera</div>
       )}
     </div>
   )
