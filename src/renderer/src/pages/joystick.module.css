@@ -4,6 +4,8 @@
   height: 100%;
   gap: 10px;
   flex-direction: row;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .main1_2 {
@@ -12,5 +14,8 @@
   height: 100%;
   gap: 10px;
   flex-direction: column;
-  padding: 50px;
+  padding: 20px;
+  background-color: var(--ev-c-black-mute);
+  border-radius: 10px;
+  border: 1px solid var(--ev-c-gray-2);
 }
