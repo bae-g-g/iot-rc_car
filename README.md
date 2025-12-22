@@ -36,3 +36,17 @@ $ npm run build:linux
 ### MQTT 실행
 
 토픽 시작 명령어 : mosquitto_sub -h localhost -t /토픽명
+
+추가 설정 : mosquitto.conf 제일 마지막에 아래 내용 추가
+```
+
+# 포트 설정
+# 1. 기본 MQTT 포트 (CMD 테스트용)
+listener 1883
+allow_anonymous true
+
+# 2. 웹소켓 포트 (일렉트론 렌더러용)
+listener 9001
+protocol websockets
+allow_anonymous true
+```
