@@ -3,10 +3,11 @@ from time import sleep
 
 sensor = DistanceSensor(echo=24, trigger=23)
 
-print("초음파 센서 모니터링 시작 (Non-blocking)")
+print("초음파 센서 테스트 시작")
 
 try:
     while True:
+        # gpiozero의 Distance 반환값은 mm
         distance_cm = sensor.distance * 100 
         
         print(f"거리: {distance_cm:.1f} cm")
