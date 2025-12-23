@@ -17,6 +17,8 @@ client.on('connect', () => {
       const temp = msgObj.temperature
       const humid = msgObj.humidity
       const image = msgObj.capture_array
+      const ultrasonic = msgObj.ultrasonic
+      const gyro = msgObj.gyro
 
       const now = new Date()
       // Generate time string in HH:mm:ss format
@@ -26,8 +28,8 @@ client.on('connect', () => {
         now.getMinutes().toString().padStart(2, '0') +
         ':' +
         now.getSeconds().toString().padStart(2, '0')
-      console.log(temp, humid, timeStr, image)
-      useSensorStore.setState({ temp, humid, timeStr, image })
+      console.log(temp, humid, timeStr, image, ultrasonic, gyro)
+      useSensorStore.setState({ temp, humid, timeStr, image, ultrasonic, gyro })
     }
   })
 })
