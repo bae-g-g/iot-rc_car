@@ -13,13 +13,12 @@ import smbus2
 # MQTT 설정
 broker_server_ip = "192.168.137.106"
 port = 1883
-pubTopic = "/test"
-
+pubTopic_to_server = "/test"
+pubTopic_to_motor = "/moter"
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
 # MQTT 연결
 try:
-    client.username_pw_set("user1", "pw")
     client.connect(broker_server_ip, port)
     client.loop_start()
     print(f" MQTT 브로커({broker_server_ip}) 연결 성공")
@@ -87,21 +86,19 @@ def get_gyro_data():
         print(f"Error: 자이로 읽기 중 알 수 없는 오류: {e}")
         return None
 
+
 def get_dht_data():
-    """온습도 읽기. 실패 시 (None, None) 반환"""
+    global DHT11
+
     if DHT11 is None: return None, None
-    
     try:
+        # 값을 읽어오되, 실패하면 미련 없이 바로 except로 빠지게 함
         t = DHT11.temperature
         h = DHT11.humidity
         return t, h
-    except RuntimeError:
-        
+    except:
+        # 에러 종류 상관없이 실패하면 바로 None 반환해서 루프 복귀
         return None, None
-    except Exception as e:
-        print(f"Error: DHT 읽기 오류: {e}")
-        return None, None
-
 def get_ultrasonic_data():
     
     if HC_SR04 is None: return None
@@ -123,6 +120,20 @@ try:
         temp, hum = get_dht_data()
         dist_cm = get_ultrasonic_data()
 
+        
+        if dist_cm is not None:
+            try:
+                # 안전하게 정수화하여 전송
+                client.publish(pubTopic_to_motor, str(int(dist_cm)))
+                print(dist_cm)
+            except Exception as e:
+                print(f"MQTT Motor 전송 실패: {e}")
+        else:
+            print("⚠️ 초음파 센서 값을 읽지 못해 전송을 건너뜁니다.")
+
+
+        
+
         data = {
             "timestamp": time.time(), # 언제 데이터인지 알면 좋음
             "temperature": temp,
@@ -134,10 +145,13 @@ try:
         
         payload = json.dumps(data)
         
+        
+
         try:
-            info = client.publish(pubTopic, payload)
+            info = client.publish(pubTopic_to_server, payload)
         except Exception as e:
             print(f" MQTT 전송 실패: {e}")
+
 
         time.sleep(0.5)
 

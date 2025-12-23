@@ -8,7 +8,7 @@ import json
 import paho.mqtt.client as mqtt
 
 picam2 = Picamera2()
-picam2.configure(picam2.create_preview_configuration(main={"format": "RGB888", "size": (640, 480)}))
+picam2.configure(picam2.create_preview_configuration(main={"format": "BGR888", "size": (640, 480)}))
 picam2.start()
 
 # -- MQTT 설정 ---
@@ -36,33 +36,26 @@ try:
 
             frame = picam2.capture_array()
             
-            
             if frame is not None:
-                # 1. 색상 보정 (RGB -> BGR) : OpenCV 인코딩을 위해 필요
-                frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-                # 2. 이미지를 JPG 형식으로 인코딩 (압축)
-                # success: 성공 여부, encoded_img: 인코딩된 바이트 데이터
-                success, encoded_img = cv2.imencode('.jpg', frame_bgr)
-    
+                success, encoded_img = cv2.imencode('.jpg', frame_rgb) 
+                
                 if success:
-                # 3. 바이트 데이터를 Base64 문자열로 변환
                     b64_string = base64.b64encode(encoded_img).decode('utf-8')
-            
+                    
                     data = {
                         "capture_array": b64_string,
-                        "shape": frame.shape, # 나중에 복원할 때 참고용 (옵션)
+                        "shape": frame.shape, 
                         "timestamp": time.time()
-                   }
-        
-                # 4. 이제 JSON 변환이 가능합니다!
+                    }
+                    
                     message = json.dumps(data)
                     info = client.publish(pubTopic, message)
                     print("JSON 생성 성공, 데이터 길이:", len(message))
 
-
             else:
-                print("캡쳐  실패 ")
+                print("캡쳐 실패")
 
     
         except Exception as error:
