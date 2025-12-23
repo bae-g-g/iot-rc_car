@@ -11,6 +11,8 @@ export const usePageStore = create((set) => ({
 export const useSensorStore = create((set) => ({
   temp: 0,
   humid: 0,
+  gyro: { x: 0, y: 0, z: 0 },
+  ultrasonic: 0,
   timeStr: '',
   image: '',
   changeTemp: (temp) =>
@@ -20,6 +22,14 @@ export const useSensorStore = create((set) => ({
   changeHumid: (humid) =>
     set((state) => ({
       humid: humid
+    })),
+  changeGyro: (gyro) =>
+    set((state) => ({
+      gyro: gyro
+    })),
+  changeUltrasonic: (ultrasonic) =>
+    set((state) => ({
+      ultrasonic: ultrasonic
     })),
   changeTimeStr: (timeStr) =>
     set((state) => ({

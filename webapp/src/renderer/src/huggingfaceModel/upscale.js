@@ -1,11 +1,11 @@
 import { InferenceClient } from '@huggingface/inference'
 import { Buffer } from 'buffer'
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 
-dotenv.config()
+// dotenv.config()
 window.Buffer = Buffer
 
-const HF_TOKEN = process.env.HF_TOKEN
+const HF_TOKEN = import.meta.env.VITE_HF_TOKEN
 const hf = new InferenceClient(HF_TOKEN)
 
 function base64ToBlob(base64, mimeType = 'image/png') {

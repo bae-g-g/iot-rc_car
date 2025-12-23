@@ -7,7 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts'
-import { Thermometer, Droplets, Sun } from 'lucide-react'
+import { Thermometer, Droplets, Activity, Wifi } from 'lucide-react'
 import styles from './Dashboard.module.css'
 import { useSensorStore } from '../zustand/state'
 import { useState, useEffect } from 'react'
@@ -26,7 +26,7 @@ const StatCard = ({ title, value, unit, icon: Icon, color }) => (
 )
 
 function Dashboard() {
-  const { temp, humid, timeStr } = useSensorStore()
+  const { temp, humid, gyro, ultrasonic, timeStr } = useSensorStore()
   const [chartData, setChartData] = useState([])
 
   useEffect(() => {
@@ -38,7 +38,7 @@ function Dashboard() {
           time: timeStr,
           temp: temp,
           humidity: humid,
-          light: 0 // Light data is not available in store yet
+          ultrasonic: ultrasonic
         }
       ]
 
@@ -49,7 +49,7 @@ function Dashboard() {
       }
       return newData
     })
-  }, [temp, humid, timeStr])
+  }, [temp, humid, ultrasonic, timeStr])
 
   return (
     <div className={styles.dashboardContainer}>
@@ -59,7 +59,14 @@ function Dashboard() {
       <div className={styles.cardsContainer}>
         <StatCard title="온도" value={temp} unit="°C" icon={Thermometer} color="#ff6b6b" />
         <StatCard title="습도" value={humid} unit="%" icon={Droplets} color="#4dabf7" />
-        <StatCard title="조도" value="0" unit="lux" icon={Sun} color="#fcc419" />
+        <StatCard title="초음파" value={ultrasonic} unit="cm" icon={Wifi} color="#fcc419" />
+        <StatCard
+          title="자이로"
+          value={`X:${gyro.x} Y:${gyro.y} Z:${gyro.z}`}
+          unit=""
+          icon={Activity}
+          color="#20c997"
+        />
       </div>
 
       {/* 차트 섹션 */}
@@ -98,9 +105,9 @@ function Dashboard() {
               />
               <Line
                 type="monotone"
-                dataKey="light"
+                dataKey="ultrasonic"
                 stroke="#fcc419"
-                name="조도(lux)"
+                name="초음파(cm)"
                 strokeWidth={2}
                 dot={{ r: 4 }}
                 activeDot={{ r: 6 }}
