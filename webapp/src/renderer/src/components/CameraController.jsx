@@ -1,16 +1,17 @@
 import cameraController from './cameraController.module.css'
 import { useSensorStore } from '../zustand/state'
+import { upscaleImage } from '../huggingfaceModel/upscale'
 
 function CameraController() {
   // const [imageSrc] = useState(null)
-  const { imageSrc } = useSensorStore((state) => state.image)
-  const imageDisplay = imageSrc ? 'block' : 'none'
+  const { image } = useSensorStore()
+  const imageDisplay = image ? 'block' : 'none'
 
   return (
     <div className={cameraController.containerStyle}>
-      {imageSrc ? (
+      {image ? (
         <img
-          src={imageSrc}
+          src={'data:image/png;base64, ' + image}
           alt="Camera Stream"
           className={cameraController.imageStyle}
           style={{ display: imageDisplay }}

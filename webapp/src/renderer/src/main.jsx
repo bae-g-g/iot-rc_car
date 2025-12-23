@@ -8,6 +8,19 @@ import Dashboard from './pages/Dashboard'
 import AppLayout from './components/AppLayout'
 
 import { client } from './mqtt/subscriber'
+import { upscaleImage_Test } from './huggingfaceModel/upscale'
+import { objectDection } from './huggingfaceModel/objectdection'
+
+(async () => {
+  const curTime = new Date().getTime()
+  upscaleImage_Test(null).then((res) => {
+    console.log(res)
+    objectDection(res).then((res) => {
+      const resultTime = new Date().getTime();
+      console.log('결과 !!!', res, resultTime - curTime)
+    })
+  })
+})()
 
 // 되면 파일 따로 만들기
 const router = createBrowserRouter([

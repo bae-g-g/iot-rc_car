@@ -16,13 +16,7 @@ client.on('connect', () => {
       const msgObj = JSON.parse(messageString)
       const temp = msgObj.temperature
       const humid = msgObj.humidity
-
-      // 1. MQTT 페이로드(Buffer)를 Blob으로 변환
-      const blob = new Blob([msgObj.image], { type: 'image/jpeg' });
-
-      // 2. Blob URL 생성 (메모리 효율적)
-      const url = URL.createObjectURL(blob)
-      const image = url
+      const image = msgObj.capture_array
 
       const now = new Date()
       // Generate time string in HH:mm:ss format
@@ -32,7 +26,7 @@ client.on('connect', () => {
         now.getMinutes().toString().padStart(2, '0') +
         ':' +
         now.getSeconds().toString().padStart(2, '0')
-      console.log(temp, humid, timeStr)
+      console.log(temp, humid, timeStr, image)
       useSensorStore.setState({ temp, humid, timeStr, image })
     }
   })
