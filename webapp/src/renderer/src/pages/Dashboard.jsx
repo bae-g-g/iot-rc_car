@@ -62,7 +62,7 @@ function Dashboard() {
         <StatCard title="초음파" value={ultrasonic} unit="cm" icon={Wifi} color="#fcc419" />
         <StatCard
           title="자이로"
-          value={`X:${gyro.x} Y:${gyro.y} Z:${gyro.z}`}
+          value={`X:${gyro?.x} Y:${gyro?.y} Z:${gyro?.z}`}
           unit=""
           icon={Activity}
           color="#20c997"

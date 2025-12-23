@@ -15,6 +15,7 @@ export const useSensorStore = create((set) => ({
   ultrasonic: 0,
   timeStr: '',
   image: '',
+  imageLock: false,
   changeTemp: (temp) =>
     set((state) => ({
       temp: temp
@@ -38,5 +39,9 @@ export const useSensorStore = create((set) => ({
   changeImage: (image) =>
     set((state) => ({
       image: image
+    })),
+  changeImageLock: (imageLock) =>
+    set((state) => ({
+      imageLock: imageLock
     }))
 }))

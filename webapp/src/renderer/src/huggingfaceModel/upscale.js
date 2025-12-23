@@ -9,25 +9,30 @@ const HF_TOKEN = import.meta.env.VITE_HF_TOKEN
 const hf = new InferenceClient(HF_TOKEN)
 
 function base64ToBlob(base64, mimeType = 'image/png') {
-  // 1. Decode the Base64 string (removes the Data URL prefix if present)
-  const byteString = atob(base64.split(',')[1] || base64)
+  try {
+    // 1. Decode the Base64 string (removes the Data URL prefix if present)
+    const byteString = atob(base64.split(',')[1] || base64)
 
-  // 2. Create an ArrayBuffer and a Uint8Array
-  const ab = new ArrayBuffer(byteString.length)
-  const ia = new Uint8Array(ab)
+    // 2. Create an ArrayBuffer and a Uint8Array
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
 
-  // 3. Fill the Uint8Array with the decoded characters
-  for (let i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i)
+    // 3. Fill the Uint8Array with the decoded characters
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i)
+    }
+
+    // 4. Return the Blob object
+    return new Blob([ab], { type: mimeType })
+  } catch (error) {
+    console.error('에러 발생:', error)
+    return error
   }
-
-  // 4. Return the Blob object
-  return new Blob([ab], { type: mimeType })
 }
 
 async function upscaleImage(base64) {
-  const imageBlob = base64ToBlob(base64)
   try {
+    const imageBlob = base64ToBlob(base64)
     console.log('모델 추론 시작... (시간이 다소 걸릴 수 있습니다)', imageBlob)
     // 3. API 호출
     const result = await hf.imageToImage({
@@ -44,7 +49,7 @@ async function upscaleImage(base64) {
     return blob
   } catch (error) {
     console.error('에러 발생:', error)
-    return imageBlob
+    return error
   }
 }
 

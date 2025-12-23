@@ -2,7 +2,7 @@ import './assets/main.css'
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
 import Joystick from './pages/Joystick'
 import Dashboard from './pages/Dashboard'
 import AppLayout from './components/AppLayout'
@@ -23,7 +23,7 @@ import { objectDection } from './huggingfaceModel/objectdection'
 // })()
 
 // 되면 파일 따로 만들기
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <AppLayout />, // AppLayout이 기본 레이아웃이 됩니다.
