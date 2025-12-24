@@ -12,3 +12,14 @@ export const sendJoystickCommand = (command) => {
     console.warn('MQTT Client is not connected.')
   }
 }
+
+export const sendPreImageComand = (base64Image) => {
+  if (client && client.connected) {
+    // 오브젝트 스트링 형식으로 변환 ({ cmd: 1 })
+    const payload = JSON.stringify({ image: base64Image })
+    client.publish('/image', payload)
+    console.log(`MQTT Published: /image -> ${payload}`)
+  } else {
+    console.warn('MQTT Client is not connected.')
+  }
+}

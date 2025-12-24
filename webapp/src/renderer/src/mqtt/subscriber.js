@@ -2,6 +2,7 @@ import mqtt from 'mqtt'
 import { useSensorStore } from '../zustand/state'
 import { upscaleImage } from '../huggingfaceModel/upscale'
 import { objectDection } from '../huggingfaceModel/objectdection'
+import { sendPreImageComand } from './publisher'
 
 const client = mqtt.connect('ws://localhost:9001')
 //mqtt가 연결되면 실행
@@ -24,32 +25,47 @@ client.on('connect', () => {
       if (msgObj?.capture_array) {
         const image = msgObj.capture_array
         if (!imageLock) {
-          // if (ultrasonic < 20) {
-          useSensorStore.setState({ imageLock: true })
-          // 여기서 이미지 업데이트
-          upscaleImage(image)
-            .then((res) => {
-              console.log('upscaleImage', res)
-              objectDection(res)
-                .then((res) => {
-                  console.log('objectDetection', res)
-                  useSensorStore.setState({ image: res })
-                  useSensorStore.setState({ imageLock: false })
-                })
-                .catch((e) => {
-                  console.log('objectDetection error', e)
-                  useSensorStore.setState({ imageLock: false })
-                })
-            })
-            .catch((e) => {
-              console.log('upscaleImage error', e)
-              useSensorStore.setState({ imageLock: false })
-            })
-          // } else {
-          // useSensorStore.setState({ image })
-          // }
+          if (ultrasonic < 20) {
+            useSensorStore.setState({ imageLock: true })
+            // 여기서 이미지 업데이트
+            upscaleImage(image)
+              .then((res) => {
+                console.log('upscaleImage', res)
+                objectDection(res)
+                  .then((res) => {
+                    console.log('objectDetection', res)
+                    useSensorStore.setState({ image: res })
+                    useSensorStore.setState({ imageLock: false })
+
+                    // 이미지 뷰어 띄우기(Base64 -> blob)
+                    const byteString = atob(res.split(',')[1])
+                    const mimeString = res.split(',')[0].split(':')[1].split(';')[0]
+                    const ab = new ArrayBuffer(byteString.length)
+                    const ia = new Uint8Array(ab)
+                    for (let i = 0; i < byteString.length; i++) {
+                      ia[i] = byteString.charCodeAt(i)
+                    }
+                    const blob = new Blob([ab], { type: mimeString })
+                    const blobUrl = URL.createObjectURL(blob)
+                    window.open(blobUrl, '_blank', 'width=640,height=480')
+
+                    // 이미지 전달
+                    sendPreImageComand(res)
+                  })
+                  .catch((e) => {
+                    console.log('objectDetection error', e)
+                    useSensorStore.setState({ imageLock: false })
+                  })
+              })
+              .catch((e) => {
+                console.log('upscaleImage error', e)
+                useSensorStore.setState({ imageLock: false })
+              })
+          } else {
+            useSensorStore.setState({ image })
+          }
         } else {
-          // useSensorStore.setState({ image })
+          useSensorStore.setState({ image })
         }
       }
       const gyro = msgObj.gyro
