@@ -42,7 +42,6 @@ function Dashboard() {
         }
       ]
 
-      console.log(newData)
       // Keep only the latest 20 data points
       if (newData.length > 20) {
         return newData.slice(newData.length - 20)
